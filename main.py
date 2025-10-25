@@ -22,7 +22,8 @@ XDG_RUNTIME_DIR = os.path.join(os.path.abspath(os.sep), 'run', 'user', str(get_u
 
 # Setup backend logger
 logging.basicConfig(filename=os.path.join(loggingDir, 'backend.log'),
-                    format='[MusicMixer] %(asctime)s %(levelname)s %(message)s',
+                    # --- CAMBIO: Nombre del logger actualizado ---
+                    format='[JCsMediaControl] %(asctime)s %(levelname)s %(message)s',
                     filemode='w+',
                     force=True)
 logger=logging.getLogger()
@@ -104,14 +105,19 @@ class Plugin:
         
         return await self.mm_get_mute_status(self)
     
+    # --- INICIO DE LA FUNCIÓN CORREGIDA ---
     async def mm_get_mute_status(self):
         logger.info("Getting current mute status")
         cmd = "pactl list sinks | grep -A 10 'State:.*RUNNING' | grep 'Mute:'"
+        
+        # Respuesta por defecto en caso de error
+        default_response = { "isMuted": False } 
+
         proc = await self.pyexec_subprocess(self, cmd)
 
         if (proc['returncode'] != 0):
             logger.info("There was an error getting the current status of mute")
-            return -1
+            return default_response # Devolver la respuesta por defecto
         
         # will get a 'no' or 'yes' from cmd
         try:
@@ -124,42 +130,44 @@ class Plugin:
             return response
         except Exception as e:
             logger.info(f"There was an exception sending the response \n {e}")
+            return default_response # Devolver la respuesta por defecto
+    # --- FIN DE LA FUNCIÓN CORREGIDA ---
 
 
-        # --- INICIO DE CÓDIGO AÑADIDO PARA YANDEX ---
+    # --- INICIO DE CÓDIGO AÑADIDO PARA YANDEX ---
 
-        async def _run_playerctl_command(self, command: str):
-            # Usamos "edge.instance22" como descubriste.
-            player_target = "edge.instance22"
-            logger.info(f"Ejecutando comando playerctl: {command} en {player_target}")
-            
-            cmd = f"playerctl -p {player_target} {command}"
-            # Replicamos el patrón de llamada de tus otras funciones
-            proc = await self.pyexec_subprocess(self, cmd) 
+    async def _run_playerctl_command(self, command: str):
+        # Usamos "edge.instance22" como descubriste.
+        player_target = "edge.instance22"
+        logger.info(f"Ejecutando comando playerctl: {command} en {player_target}")
+        
+        cmd = f"playerctl -p {player_target} {command}"
+        # Replicamos el patrón de llamada de tus otras funciones
+        proc = await self.pyexec_subprocess(self, cmd) 
 
-            if (proc['returncode'] != 0):
-                logger.error(f"Error al ejecutar playerctl. STDERR: {proc['stderr']}")
-                logger.error("Asegúrate de que Yandex Music (edge) esté abierto.")
-                return False
-            
-            return True
+        if (proc['returncode'] != 0):
+            logger.error(f"Error al ejecutar playerctl. STDERR: {proc['stderr']}")
+            logger.error("Asegúrate de que Yandex Music (edge) esté abierto.")
+            return False
+        
+        return True
 
-        async def ym_play_pause(self):
-            logger.info("Recibida llamada a ym_play_pause")
-            # Replicamos el patrón de llamada
-            return await self._run_playerctl_command(self, "play-pause")
+    async def ym_play_pause(self):
+        logger.info("Recibida llamada a ym_play_pause")
+        # Replicamos el patrón de llamada
+        return await self._run_playerctl_command(self, "play-pause")
 
-        async def ym_next(self):
-            logger.info("Recibida llamada a ym_next")
-            # Replicamos el patrón de llamada
-            return await self._run_playerctl_command(self, "next")
+    async def ym_next(self):
+        logger.info("Recibida llamada a ym_next")
+        # Replicamos el patrón de llamada
+        return await self._run_playerctl_command(self, "next")
 
-        async def ym_previous(self):
-            logger.info("Recibida llamada a ym_previous")
-            # Replicamos el patrón de llamada
-            return await self._run_playerctl_command(self, "previous")
+    async def ym_previous(self):
+        logger.info("Recibida llamada a ym_previous")
+        # Replicamos el patrón de llamada
+        return await self._run_playerctl_command(self, "previous")
 
-        # --- FIN DE CÓDIGO AÑADIDO PARA YANDEX ---
+    # --- FIN DE CÓDIGO AÑADIDO PARA YANDEX ---
 
 
     # Asyncio-compatible long-running code, executed in a task when the plugin is loaded
