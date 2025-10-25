@@ -50,6 +50,23 @@ class PythonServer {
     return this.server!.callPluginMethod('mm_get_mute_status', {})
   }
 
+  // --- INICIO DE CÓDIGO AÑADIDO PARA YANDEX ---
+
+  yandexPlayPause(): Promise<any> {
+    return this.server!.callPluginMethod('ym_play_pause', {})
+  }
+
+  yandexNext(): Promise<any> {
+    return this.server!.callPluginMethod('ym_next', {})
+  }
+
+  yandexPrevious(): Promise<any> {
+    return this.server!.callPluginMethod('ym_previous', {})
+  }
+
+  // --- FIN DE CÓDIGO AÑADIDO PARA YANDEX ---
+
+
 }
 
 export default PythonServer

@@ -125,6 +125,43 @@ class Plugin:
         except Exception as e:
             logger.info(f"There was an exception sending the response \n {e}")
 
+
+        # --- INICIO DE CÓDIGO AÑADIDO PARA YANDEX ---
+
+        async def _run_playerctl_command(self, command: str):
+            # Usamos "edge.instance22" como descubriste.
+            player_target = "edge.instance22"
+            logger.info(f"Ejecutando comando playerctl: {command} en {player_target}")
+            
+            cmd = f"playerctl -p {player_target} {command}"
+            # Replicamos el patrón de llamada de tus otras funciones
+            proc = await self.pyexec_subprocess(self, cmd) 
+
+            if (proc['returncode'] != 0):
+                logger.error(f"Error al ejecutar playerctl. STDERR: {proc['stderr']}")
+                logger.error("Asegúrate de que Yandex Music (edge) esté abierto.")
+                return False
+            
+            return True
+
+        async def ym_play_pause(self):
+            logger.info("Recibida llamada a ym_play_pause")
+            # Replicamos el patrón de llamada
+            return await self._run_playerctl_command(self, "play-pause")
+
+        async def ym_next(self):
+            logger.info("Recibida llamada a ym_next")
+            # Replicamos el patrón de llamada
+            return await self._run_playerctl_command(self, "next")
+
+        async def ym_previous(self):
+            logger.info("Recibida llamada a ym_previous")
+            # Replicamos el patrón de llamada
+            return await self._run_playerctl_command(self, "previous")
+
+        # --- FIN DE CÓDIGO AÑADIDO PARA YANDEX ---
+
+
     # Asyncio-compatible long-running code, executed in a task when the plugin is loaded
     async def _main(self):
         decky_plugin.logger.info("Hello World!")

@@ -1,42 +1,5 @@
-# Steam Deck Volume Mixer plugin
-
-A [decky-loader](https://github.com/SteamDeckHomebrew/decky-loader) plugin that allows the user to control the volume of any running program on the steam deck individually. Inspired on the functionality of Windows' Volume Mixer.
-
-![volume mixer screen shot](/assets/Volume-mixer-screenshot.jpeg)
-
-## Dependencies
-
-This plugin was created using the [decky-plugin-template](https://github.com/SteamDeckHomebrew/decky-plugin-template) and uses its dependencies. 
-
-Relies on the user having `pnpm` installed on their system. This can be downloaded from `npm` itself which is recommended. 
-
-#### Linux
-
-```bash
-sudo npm i -g pnpm
-```
-
-### How to run
-
-Clone this repo and run these commands:
-
-```bash
-pnpm i
+Decky Volume Mixer & Yandex Music ControlA decky-loader plugin with two main features:Volume Mixer: Allows the user to control the volume of any running program on the Steam Deck individually. Inspired on the functionality of Windows' Volume Mixer.Yandex Music Control: Provides quick access to media controls (Play/Pause, Next, Previous) for the Yandex Music web app running in Microsoft Edge.(Te recomiendo tomar una nueva captura de pantalla que muestre tanto los controles de Yandex como los de volumen y reemplazar la línea de abajo).Dependencies & RequirementsPlugin DependenciesThis plugin was created using the decky-plugin-template and uses its dependencies.Relies on the user having pnpm installed on their system. This can be downloaded from npm itself which is recommended.Linuxsudo npm i -g pnpm
+System Requirements (¡Importante!)The new media control functionality requires:playerctl: This tool is used to send commands to media players. It must be installed on your system (viene incluido en Bazzite OS).Microsoft Edge: The controls are configured to target the Yandex Music web app running specifically within Edge.How to BuildClone this repo and run these commands:pnpm i
 pnpm run build
-```
-
-To transfer this plugin to the deck you can run the vscode tasks that are configured to deploy it to your deck, checkout .vscode folder for reference.
-
-#### Other important information
-
-Everytime you change the frontend code (`index.tsx` etc) you will need to rebuild using the commands from step 2 above or the build task if you're using vscode or a derivative.
-
-Note: If you are receiving build errors due to an out of date library, you should run this command inside of your repository:
-
-```bash
-pnpm update decky-frontend-lib --latest
-```
-
-## Important information about privacy
-
-This plugin doesn't use any root privileges to modify the volume level of the running applications nor sends any kind of data to the internet.
+To transfer this plugin to the deck you can run the vscode tasks that are configured to deploy it to your deck, checkout .vscode folder for reference.Other important informationEverytime you change the frontend code (index.tsx etc) you will need to rebuild using the commands from step 2 above or the build task if you're using vscode or a derivative.Note: If you are receiving build errors due to an out of date library, you should run this command inside of your repository:pnpm update decky-frontend-lib --latest
+Important information about privacyThis plugin doesn't use any root privileges to modify the volume level of the running applications nor sends any kind of data to the internet. It only executes local system commands (pactl and playerctl) to manage audio and media playback.
