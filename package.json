@@ -1,5 +1,5 @@
 {
-  "name": "volume-mixer",
+  "name": "Music Control",
   "version": "1.0.0",
   "description": "Control the sound level of any running app on the steam deck individually.",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jacklu97/SteamDeck-VolumeMixer"
+    "url": "https://github.com/pascaltll/decky-music-control"
   },
   "keywords": [
     "decky",

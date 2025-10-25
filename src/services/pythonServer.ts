@@ -34,38 +34,65 @@ class PythonServer {
     })();
   }
 
+  // --- INICIO DE FUNCIONES ORIGINALES (MODIFICADAS PARA SER SEGURAS) ---
+
   getPlayingProgramsNames(): Promise<any> {
+    // Si el servidor no está listo, devuelve una promesa con un array vacío
+    if (!this.server) {
+      return Promise.resolve({ success: true, result: [] });
+    }
     return this.server!.callPluginMethod('mm_get_programs_names', {})
   }
 
   setNewVolume(playerId: number, newVolumeVal: number): Promise<any> {
+    if (!this.server) {
+      return Promise.resolve({ success: false });
+    }
     return this.server!.callPluginMethod('mm_update_current_volume', {player_id: playerId, new_volume: newVolumeVal})
   }
 
   toggleMuteStatus(): Promise<any> {
+    if (!this.server) {
+      return Promise.resolve({ success: false });
+    }
     return this.server!.callPluginMethod('mm_toggle_mute_system', {})
   }
 
   getMuteStatus(): Promise<any> {
+    // Si el servidor no está listo, devuelve un estado de "no muteado" por defecto
+    if (!this.server) {
+      return Promise.resolve({ success: true, result: { isMuted: false } });
+    }
     return this.server!.callPluginMethod('mm_get_mute_status', {})
   }
 
-  // --- INICIO DE CÓDIGO AÑADIDO PARA YANDEX ---
+  // --- FIN DE FUNCIONES ORIGINALES ---
+
+
+  // --- INICIO DE FUNCIONES DE YANDEX (LAS QUE AÑADIMOS) ---
 
   yandexPlayPause(): Promise<any> {
+    if (!this.server) {
+      return Promise.resolve({ success: false });
+    }
     return this.server!.callPluginMethod('ym_play_pause', {})
   }
 
   yandexNext(): Promise<any> {
+    if (!this.server) {
+      return Promise.resolve({ success: false });
+    }
     return this.server!.callPluginMethod('ym_next', {})
   }
 
   yandexPrevious(): Promise<any> {
+    if (!this.server) {
+      return Promise.resolve({ success: false });
+    }
     return this.server!.callPluginMethod('ym_previous', {})
   }
 
-  // --- FIN DE CÓDIGO AÑADIDO PARA YANDEX ---
-
+  // --- FIN DE FUNCIONES DE YANDEX ---
 
 }
 
