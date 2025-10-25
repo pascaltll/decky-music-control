@@ -1,13 +1,13 @@
 import React, { VFC } from "react";
 
-// --- INICIO DE IMPORTACIONES AÑADIDAS ---
+// --- INICIO DE IMPORTACIONES ---
 import { PanelSection, Button } from "decky-frontend-lib";
 import { FaPlay, FaStepForward, FaStepBackward } from "react-icons/fa";
 import PythonServer from "../../services/pythonServer"; // Importar la clase
-// --- FIN DE IMPORTACIONES AÑADIDAS ---
+// --- FIN DE IMPORTACIONES ---
 
 import AvailableSources from "../AvailableSources/AvailableSources";
-import GeneralSoundToggle from "../GeneralSoundToggle/GeneralSoundToggle";
+import GeneralSoundToggle from "../GeneralSoundToggle/GeneralSoundToggle"; // Se usa aquí
 
 // Obtener la instancia del servidor para poder usarla
 const pythonServer = PythonServer.getInstance();
@@ -16,13 +16,13 @@ const App: VFC = () => {
   return (
     <>
       {/* --- INICIO DE CÓDIGO AÑADIDO PARA YANDEX --- */}
-      <PanelSection title="Yandex Music Control">
+      <PanelSection title="JCs Media Control">
         <div 
           style={{ 
             display: "flex", 
             justifyContent: "center", 
             gap: "10px",
-            padding: "10px 0" // Añadir algo de espacio vertical
+            padding: "10px 0"
           }}
         >
           {/* Botón de Anterior */}
@@ -57,9 +57,10 @@ const App: VFC = () => {
       
       
       {/* --- CÓDIGO ORIGINAL (CONTROLES DE VOLUMEN) --- */}
-      {/* Estos componentes se mantienen para que el plugin de volumen siga funcionando */}
+      {/* Usamos una clave para forzar la inicialización de los componentes si fallan. */}
+      {/* Si el GeneralSoundToggle falla, el AvailableSources puede seguir fallando */}
       <GeneralSoundToggle />
-      <AvailableSources />
+      <AvailableSources key="volume-sources-key" /> 
     </>
   );
 }
